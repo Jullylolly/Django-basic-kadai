@@ -1,34 +1,32 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, ListView
+from django.contrib.auth.views import LoginView  # ← 追加
+
+from django.views.generic import TemplateView, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from .models import Product
 from django.urls import reverse_lazy
 
-
 class TopView(TemplateView):
     template_name = "top.html"
 
-class ProductListView(LoginRequiredMixin, ListView):
+class ProductListView(ListView):
     model = Product
     paginate_by = 3
+    template_name = 'crud/product_list.html'
 
-class ProductCreateView(LoginRequiredMixin,CreateView):
+class ProductCreateView(CreateView):
     model = Product
     fields = '__all__'
 
-
-class ProductUpdateView(LoginRequiredMixin,UpdateView):
+class ProductUpdateView(UpdateView):
     model = Product
     fields = '__all__'
     template_name_suffix = '_update_form'
 
-
-class ProductDeleteView(LoginRequiredMixin,DeleteView):
+class ProductDeleteView(DeleteView):
     model = Product
     success_url = reverse_lazy('list')
 
-
-class ProductDetailView(LoginRequiredMixin, DetailView):
+class ProductDetailView(DetailView):
     model = Product
-   
-
+    template_name_suffix = '_detail'
